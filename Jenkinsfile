@@ -2,9 +2,19 @@ pipeline {
     agent any
 
     stages {
-        stage('Test') {
+        stage('Check Python') {
             steps {
-                echo 'Jenkins successfully connected to GitHub!'
+                sh 'python3 --version'
+            }
+        }
+
+        stage('Run Website Health Check') {
+            steps {
+                sh '''
+                    python3 -m venv .venv
+                    .venv/bin/python -m pip install requests
+                    .venv/bin/python website_health.py
+                '''
             }
         }
     }
